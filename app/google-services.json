@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "665905352667",
+    "project_id": "intelligent-budget-b72e9",
+    "storage_bucket": "intelligent-budget-b72e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665905352667:android:1881fa0aa0c34f3bd6a1fe",
+        "android_client_info": {
+          "package_name": "com.itesm.budget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665905352667-mi9jtbc3uus3kt21k6h672ddrvpfbdcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeCsrIrse094Km4MIAYUelV1WtM_g41zM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665905352667-mi9jtbc3uus3kt21k6h672ddrvpfbdcj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
