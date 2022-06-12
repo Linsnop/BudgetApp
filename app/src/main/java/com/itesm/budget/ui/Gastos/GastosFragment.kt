@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.itesm.budget.DatosUsuario
 import com.itesm.budget.MainActivity
 
 import com.itesm.budget.databinding.FragmentGastosBinding
@@ -44,14 +46,18 @@ class GastosFragment : Fragment() {
         }
 
         binding.btnGuardarGasto.setOnClickListener{
-            if (binding.etGasto.text.isEmpty())
-                Toast.makeText(activity, "Campo Gasto Vacio",Toast.LENGTH_LONG).show()
+            if (binding.etCompra.text.isNullOrEmpty())
+                Toast.makeText(activity, "Campo Compra Vacio",Toast.LENGTH_LONG).show()
+            else
+                if (binding.etGasto.text.isEmpty())
 
-            else
-                if (binding.etFecha.text.isEmpty())
-                    Toast.makeText(activity, "Campo Fecha Vacio",Toast.LENGTH_LONG).show()
-            else
-                DialogoAñadir()
+                    Toast.makeText(activity, "Campo Gasto Vacio",Toast.LENGTH_LONG).show()
+
+                else
+                    if (binding.etFecha.text.isEmpty())
+                        Toast.makeText(activity, "Campo Fecha Vacio",Toast.LENGTH_LONG).show()
+                    else
+                        DialogoAñadir()
         }
         binding.btnRegresar.setOnClickListener{
             regresar()
@@ -74,13 +80,22 @@ class GastosFragment : Fragment() {
     }
 
     private fun guardarNube() {
+        val compra = binding.etCompra.text.toString()
         val categoria = binding.spCategoria.selectedItem.toString()
         val gasto = binding.etGasto.text.toString().toDouble()
         val fecha = binding.etFecha.text.toString()
 
-        val registroGasto = RegistroGasto(categoria,gasto,fecha)
 
-        val referencia = baseDatos.getReference("/RegistroGasto/$categoria")
+        //Shared Pref
+        val sharedPref = activity?.getSharedPreferences(
+            "usuario", AppCompatActivity.MODE_PRIVATE
+        )
+        val token = sharedPref?.getString("Token", "No existe")
+
+        val registroGasto = RegistroGasto(compra,categoria,gasto,fecha)
+
+        val referencia = baseDatos.getReference("/Gastos/${token}/${compra}")
+        //val referencia = baseDatos.getReference("/Usuario/${token}/${}")
 
         referencia.setValue(registroGasto)
 

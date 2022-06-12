@@ -48,6 +48,8 @@ class PantallaLogin : AppCompatActivity() {
             editor.commit()
             //Intento de conseguir saldo
 
+
+
             /// Subir a la base de datos
             guardarDatosNube()
             entrarAPP()
