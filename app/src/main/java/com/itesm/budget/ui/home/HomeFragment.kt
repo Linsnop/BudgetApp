@@ -104,24 +104,9 @@ class HomeFragment : Fragment() {
         val sharedPref = activity?.getSharedPreferences(
             "usuario", AppCompatActivity.MODE_PRIVATE
         )
-        val token = sharedPref?.getString("Token", "No existe")
+        val saldo = sharedPref?.getFloat("Saldo", 0.0f)
+        binding.tvSaldo.setText("Saldo Actual: ${saldo}")
 
-
-        val baseDatos = Firebase.database
-        val referencia = baseDatos.getReference("/Usuario/${token}")
-
-        referencia.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                //llegaron los datos (Snapshot)
-                    val usuario = snapshot.getValue(DatosUsuario::class.java)
-                    binding.tvSaldo.setText("Saldo Actual: ${usuario?.saldo.toString()}")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                print("Error: $error")
-            }
-
-        })
     }
 
     /// Todos los dialogos

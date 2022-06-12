@@ -51,6 +51,13 @@ class GastosFragment : Fragment() {
         }
 
         binding.btnGuardarGasto.setOnClickListener{
+            //Obtener shared Preferences
+            val sharedPref = activity?.getSharedPreferences(
+                "usuario", AppCompatActivity.MODE_PRIVATE
+            )
+            val saldo = sharedPref?.getFloat("Saldo", 0.0f)
+
+
             if (binding.etCompra.text.isNullOrEmpty())
                 Toast.makeText(activity, "Campo '¿Qué se compró?' Vacio",Toast.LENGTH_LONG).show()
             else
@@ -62,7 +69,11 @@ class GastosFragment : Fragment() {
                     if (binding.etFecha.text.isEmpty())
                         Toast.makeText(activity, "Campo 'Fecha' Vacio",Toast.LENGTH_LONG).show()
                     else
-                        DialogoAñadir()
+                        if ( (saldo!! - binding.etGasto.text.toString().toFloat()) < 0.0f )
+                            DialogoError()
+                            else
+                                actualizarSaldo()
+                                DialogoAñadir()
         }
         binding.btnRegresar.setOnClickListener{
             regresar()
@@ -76,7 +87,6 @@ class GastosFragment : Fragment() {
         val sharedPref = activity?.getSharedPreferences(
             "usuario", AppCompatActivity.MODE_PRIVATE
         )
-        val token = sharedPref?.getString("Token", "No existe")
         val saldo = sharedPref?.getFloat("Saldo", 0.0f)
 
         binding.tvSaldoGastos.text = saldo.toString()
@@ -101,7 +111,7 @@ class GastosFragment : Fragment() {
     private fun guardarNube() {
         val compra = binding.etCompra.text.toString()
         val categoria = binding.spCategoria.selectedItem.toString()
-        val gasto = binding.etGasto.text.toString().toDouble()
+        val gasto = binding.etGasto.text.toString().toFloat()
         val fecha = binding.etFecha.text.toString()
 
 
@@ -119,6 +129,8 @@ class GastosFragment : Fragment() {
         referencia.setValue(registroGasto)
 
         println("Dato guardado en la nube")
+        //actualizarSaldo()
+        regresar()
     }
 
     private fun configurarLista() {
@@ -127,13 +139,36 @@ class GastosFragment : Fragment() {
         binding.spCategoria.adapter = adaptador
     }
 
+    private fun actualizarSaldo() {
+        /// Obtener shared pref
+        val sharedPref = activity?.getSharedPreferences(
+            "usuario", AppCompatActivity.MODE_PRIVATE
+        )
+        val token = sharedPref?.getString("Token", "No existe")
+        val nombre = sharedPref?.getString("Nombre", "No hay nombre")
+        val correo = sharedPref?.getString("Correo","No hay Correo")
+        val saldo = sharedPref?.getFloat("Saldo",0.0f)
+
+        val nuevoSaldo = (saldo!! - binding.etGasto.text.toString().toFloat())
+
+        val Usuario = DatosUsuario(token!!,nombre!!,correo!!,nuevoSaldo!!)
+
+        val referencia = baseDatos.getReference("/Usuario/${token}")
+
+        referencia.setValue(Usuario)
+
+        //Actualizar shared pref
+        val editor = sharedPref.edit()
+        editor.putFloat("Saldo", nuevoSaldo.toFloat())
+        editor.commit()
+    }
 
     /// Todos los dialogos
 
     private fun DialogoAñadir(){
         AlertDialog.Builder(activity) .apply {
             setTitle("Añadir Gasto")
-            setMessage("Gasto añadido !!")
+            setMessage("Gasto añadido !!\rRegresando a pantalla principal")
             setPositiveButton("Ok") { _: DialogInterface, _: Int ->
                 //Accion positiva
                 guardarNube()
@@ -142,13 +177,14 @@ class GastosFragment : Fragment() {
         }.show()
     }
 
+
+
     private fun DialogoError(){
         AlertDialog.Builder(activity) .apply {
             setTitle("Error")
-            setMessage("Debes llenar todos los campos !!")
+            setMessage("El costo del gasto no puede ser mayor a tu saldo actual")
             setPositiveButton("Ok") { _: DialogInterface, _: Int ->
                 //Accion
-                guardarNube()
 
             }
         }.show()
