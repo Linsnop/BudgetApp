@@ -14,7 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.itesm.budget.databinding.FragmentSlideshowBinding
-import com.itesm.budget.ui.gallery.RegistroGasto
+import com.itesm.budget.ui.Gastos.RegistroGasto
 
 class SlideshowFragment : Fragment() {
 

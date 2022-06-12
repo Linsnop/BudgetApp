@@ -41,7 +41,7 @@
             android:id="@+id/etSaldo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="hint" />
+            android:hint="Nuevo Saldo" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

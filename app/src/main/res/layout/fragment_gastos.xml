@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.gallery.GalleryFragment">
+    tools:context=".ui.Gastos.GastosFragment">
 
     <TextView
         android:id="@+id/textView2"
@@ -65,8 +65,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Costo"
             android:inputType="numberDecimal"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Fecha"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/btnGuardarGasto"
