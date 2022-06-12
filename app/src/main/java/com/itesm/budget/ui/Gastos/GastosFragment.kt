@@ -11,7 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.itesm.budget.DatosUsuario
@@ -39,6 +42,8 @@ class GastosFragment : Fragment() {
         baseDatos = Firebase.database
         // Registrar eventos
         configurarLista()
+        // Verificar Saldo
+            ObtenerSaldo()
 
         /// Fecha
         binding.etFecha.setOnClickListener {
@@ -47,22 +52,36 @@ class GastosFragment : Fragment() {
 
         binding.btnGuardarGasto.setOnClickListener{
             if (binding.etCompra.text.isNullOrEmpty())
-                Toast.makeText(activity, "Campo Compra Vacio",Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "Campo '¿Qué se compró?' Vacio",Toast.LENGTH_LONG).show()
             else
                 if (binding.etGasto.text.isEmpty())
 
-                    Toast.makeText(activity, "Campo Gasto Vacio",Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Campo 'Gasto' Vacio",Toast.LENGTH_LONG).show()
 
                 else
                     if (binding.etFecha.text.isEmpty())
-                        Toast.makeText(activity, "Campo Fecha Vacio",Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "Campo 'Fecha' Vacio",Toast.LENGTH_LONG).show()
                     else
                         DialogoAñadir()
         }
         binding.btnRegresar.setOnClickListener{
             regresar()
         }
+
+
     }
+
+    private fun ObtenerSaldo() {
+        //Obtener shared Preferences
+        val sharedPref = activity?.getSharedPreferences(
+            "usuario", AppCompatActivity.MODE_PRIVATE
+        )
+        val token = sharedPref?.getString("Token", "No existe")
+        val saldo = sharedPref?.getFloat("Saldo", 0.0f)
+
+        binding.tvSaldoGastos.text = saldo.toString()
+
+            }
 
     private fun showDatePickerDialog() {
         val datePicker = DatePickerFragment{day,month,year -> onDateSelected(day,month,year)}

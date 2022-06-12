@@ -6,6 +6,6 @@ data class DatosUsuario(
     var token: String = "",
     var nombre: String = "",
     var correo: String = "",
-    var saldo: Double = 0.0
+    var saldo: Float = 0.0f
     //var gastos: RegistroGasto = RegistroGasto("","",0.0,"")
 )

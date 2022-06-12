@@ -7,6 +7,9 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.itesm.budget.databinding.ActivityPantallaLoginBinding
@@ -48,12 +51,45 @@ class PantallaLogin : AppCompatActivity() {
             editor.commit()
             //Intento de conseguir saldo
 
-
+            BuscarSaldoEnNube()
 
             /// Subir a la base de datos
             guardarDatosNube()
             entrarAPP()
         }
+    }
+
+    private fun BuscarSaldoEnNube() {
+
+        //Obtener shared Preferences
+        val sharedPref = getSharedPreferences(
+            "usuario", AppCompatActivity.MODE_PRIVATE
+        )
+        val token = sharedPref?.getString("Token", "No existe")
+
+
+        val baseDatos = Firebase.database
+        val referencia = baseDatos.getReference("/Usuario/${token}")
+
+        referencia.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //llegaron los datos (Snapshot)
+                val usuario = snapshot.getValue(DatosUsuario::class.java)
+                val saldoActual = usuario!!.saldo
+
+                /// Guadrar saldo en editor
+                val editor = sharedPref.edit()
+                editor.putFloat("Saldo", saldoActual)
+                editor.commit()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                print("Error: $error")
+            }
+
+        })
+
+
     }
 
     private fun guardarDatosNube() {
@@ -65,10 +101,11 @@ class PantallaLogin : AppCompatActivity() {
         val token = sharedPref?.getString("Token", "No existe")
         val nombre = sharedPref?.getString("Nombre", "No hay nombre")
         val correo = sharedPref?.getString("Correo","No hay Correo")
+        val saldo = sharedPref?.getFloat("Saldo",0.0f)
 
-        //println("El token en home es ${token}")
+        println("El saldo en home es ${saldo}")
 
-        val Usuario = DatosUsuario(token!!,nombre!!,correo!!)
+        val Usuario = DatosUsuario(token!!,nombre!!,correo!!, saldo!!)
 
         val referencia = baseDatos.getReference("/Usuario/${token}")
 

@@ -1,10 +1,13 @@
 package com.itesm.budget.ui.home
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -57,14 +60,17 @@ class HomeFragment : Fragment() {
 
         //Actualizar saldo boton
         binding.btnSaldo.setOnClickListener {
-            ActualizarSaldo()
+            if (binding.etSaldo.text.isNullOrEmpty())
+                Toast.makeText(activity, "Campo 'Nuevo Saldo' Vacio",Toast.LENGTH_LONG).show()
+            else
+                DialogoNuevoSaldo()
         }
 
     }
 
     private fun ActualizarSaldo() {
         //Manda el saldo a firebase
-        val nuevoSaldo = binding.etSaldo.text.toString().toDouble()
+        val nuevoSaldo = binding.etSaldo.text.toString().toFloat()
 
         val baseDatos = Firebase.database
         /// Obtener shared pref
@@ -116,6 +122,20 @@ class HomeFragment : Fragment() {
             }
 
         })
+    }
+
+    /// Todos los dialogos
+
+    private fun DialogoNuevoSaldo(){
+        AlertDialog.Builder(activity) .apply {
+            setTitle("Listo!!")
+            setMessage("Saldo Actualizado")
+            setPositiveButton("Ok") { _: DialogInterface, _: Int ->
+                //Accion positiva
+                ActualizarSaldo()
+
+            }
+        }.show()
     }
 
 
