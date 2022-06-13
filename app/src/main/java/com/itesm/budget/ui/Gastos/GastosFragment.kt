@@ -73,7 +73,7 @@ class GastosFragment : Fragment() {
                             DialogoError()
                             else
                                 actualizarSaldo()
-                                DialogoAñadir()
+                                //DialogoAñadir()
         }
         binding.btnRegresar.setOnClickListener{
             regresar()
@@ -109,6 +109,7 @@ class GastosFragment : Fragment() {
     }
 
     private fun guardarNube() {
+        val baseDatos = Firebase.database
         val compra = binding.etCompra.text.toString()
         val categoria = binding.spCategoria.selectedItem.toString()
         val gasto = binding.etGasto.text.toString().toFloat()
@@ -130,11 +131,11 @@ class GastosFragment : Fragment() {
 
         println("Dato guardado en la nube")
         //actualizarSaldo()
-        regresar()
+        //regresar()
     }
 
     private fun configurarLista() {
-        val arrCategorias = listOf("Ahorro","Gastos fijos","Entretenimiento", "Servicios", "Despensa")
+        val arrCategorias = listOf("Ahorro","Gastos fijos","Entretenimiento", "Servicios", "Despensa","Otro")
         val adaptador = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,arrCategorias)
         binding.spCategoria.adapter = adaptador
     }
@@ -161,6 +162,10 @@ class GastosFragment : Fragment() {
         val editor = sharedPref.edit()
         editor.putFloat("Saldo", nuevoSaldo.toFloat())
         editor.commit()
+
+        println("Usuario actualizado")
+
+        DialogoAñadir()
     }
 
     /// Todos los dialogos
@@ -168,7 +173,7 @@ class GastosFragment : Fragment() {
     private fun DialogoAñadir(){
         AlertDialog.Builder(activity) .apply {
             setTitle("Añadir Gasto")
-            setMessage("Gasto añadido !!\rRegresando a pantalla principal")
+            setMessage("Gasto añadido !! Regresando a pantalla principal")
             setPositiveButton("Ok") { _: DialogInterface, _: Int ->
                 //Accion positiva
                 guardarNube()

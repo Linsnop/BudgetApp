@@ -65,6 +65,7 @@ class HomeFragment : Fragment() {
                 // Cargar pantalla Login
                 val intLogin = Intent(requireContext(), PantallaLogin::class.java)
                 startActivity(intLogin)
+
             }
         }
 

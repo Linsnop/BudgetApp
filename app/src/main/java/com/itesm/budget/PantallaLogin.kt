@@ -30,7 +30,7 @@ class PantallaLogin : AppCompatActivity() {
             autenticar()
         }
 
-        verificarLogin()
+        //verificarLogin()
     }
 
     // Si ya esta firmado, Pasa a la segunda pantalla
@@ -154,10 +154,11 @@ class PantallaLogin : AppCompatActivity() {
             )
             val editor = sharedPref.edit()
             editor.putString("Token", usuario?.uid)
+            editor.putString("Nombre", usuario?.displayName)
+            editor.putString("Correo", usuario?.email)
             editor.commit()
 
-            BuscarSaldoEnNube()
-
+            verificarLogin()
             //entrarAPP()
         } else {
             //Sign In Failed xD
