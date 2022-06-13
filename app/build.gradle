@@ -48,9 +48,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.3'
 
     ///Extras
+
     // Firebase
     implementation'com.firebaseui:firebase-ui-auth:8.0.1'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 
     testImplementation 'junit:junit:4.13.2'

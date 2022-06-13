@@ -16,7 +16,7 @@ import com.itesm.budget.databinding.ActivityPantallaLoginBinding
 
 class PantallaLogin : AppCompatActivity() {
 
-    private  lateinit var binding: ActivityPantallaLoginBinding
+    private lateinit var binding: ActivityPantallaLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class PantallaLogin : AppCompatActivity() {
 
 
         //Registrar evento
-        binding.btnLogin.setOnClickListener{
+        binding.btnLogin.setOnClickListener {
             autenticar()
         }
 
@@ -36,18 +36,19 @@ class PantallaLogin : AppCompatActivity() {
     // Si ya esta firmado, Pasa a la segunda pantalla
     private fun verificarLogin() {
 
-        val usuario= FirebaseAuth.getInstance().currentUser
-        if (usuario!=null){
+        val usuario = FirebaseAuth.getInstance().currentUser
+        if (usuario != null) {
             //Ya esta firmado
             println("Bienvenido ***** ${usuario.displayName} ****")
             //Guardar los datos en el editor
 
             val sharedPref = getSharedPreferences(
-                "usuario", MODE_PRIVATE)
+                "usuario", MODE_PRIVATE
+            )
             val editor = sharedPref.edit()
             editor.putString("Token", usuario?.uid)
-            editor.putString("Nombre",usuario?.displayName)
-            editor.putString("Correo",usuario?.email)
+            editor.putString("Nombre", usuario?.displayName)
+            editor.putString("Correo", usuario?.email)
             editor.commit()
             //Intento de conseguir saldo
 
@@ -65,10 +66,10 @@ class PantallaLogin : AppCompatActivity() {
         val sharedPref = getSharedPreferences(
             "usuario", AppCompatActivity.MODE_PRIVATE
         )
-        val token = sharedPref?.getString("Token", "No existe")
+        val token = sharedPref?.getString(
+            "Token", "No existe")
 
-
-        val baseDatos = Firebase.database
+            val baseDatos = Firebase . database
         val referencia = baseDatos.getReference("/Usuario/${token}")
 
         referencia.addValueEventListener(object : ValueEventListener {
@@ -100,12 +101,12 @@ class PantallaLogin : AppCompatActivity() {
         )
         val token = sharedPref?.getString("Token", "No existe")
         val nombre = sharedPref?.getString("Nombre", "No hay nombre")
-        val correo = sharedPref?.getString("Correo","No hay Correo")
-        val saldo = sharedPref?.getFloat("Saldo",0.0f)
+        val correo = sharedPref?.getString("Correo", "No hay Correo")
+        val saldo = sharedPref?.getFloat("Saldo", 0.0f)
 
         println("El saldo en home es ${saldo}")
 
-        val Usuario = DatosUsuario(token!!,nombre!!,correo!!, saldo!!)
+        val Usuario = DatosUsuario(token!!, nombre!!, correo!!, saldo!!)
 
         val referencia = baseDatos.getReference("/Usuario/${token}")
 
@@ -116,36 +117,36 @@ class PantallaLogin : AppCompatActivity() {
 
     private fun entrarAPP() {
         // Entrar a la app
-        val intApp= Intent(this, MainActivity::class.java)
+        val intApp = Intent(this, MainActivity::class.java)
         startActivity(intApp)
         //Borrar pantalla de Login
         finish() // Descarga de memoria la actividad
 
     }
 
-    private val signInLauncher= registerForActivityResult(
+    private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
-    ){
-            res ->
+    ) { res ->
         this.onSignInResult(res)
     }
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
-        if (result.resultCode== RESULT_OK){
-            val usuario= FirebaseAuth.getInstance().currentUser
+        if (result.resultCode == RESULT_OK) {
+            val usuario = FirebaseAuth.getInstance().currentUser
             println("Bienvenido: ${usuario?.displayName}")
             println("Correo: ${usuario?.email}")
             println("Token: ${usuario?.uid}")
             // Intento de guardar token de usuario
             val sharedPref = getSharedPreferences(
-                "usuario", MODE_PRIVATE)
+                "usuario", MODE_PRIVATE
+            )
             val editor = sharedPref.edit()
             editor.putString("Token", usuario?.uid)
             editor.commit()
 
             entrarAPP()
-        } else{
+        } else {
             //Sign In Failed xD
             println("Error: Intantalo de nuevo")
         }
