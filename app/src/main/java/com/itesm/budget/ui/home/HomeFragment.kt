@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.itesm.budget.DatosUsuario
+import com.itesm.budget.MainActivity
 import com.itesm.budget.PantallaLogin
 import com.itesm.budget.R
 import com.itesm.budget.databinding.FragmentHomeBinding
@@ -107,6 +108,13 @@ class HomeFragment : Fragment() {
         val editor = sharedPref.edit()
         editor.putFloat("Saldo", nuevoSaldo.toFloat())
         editor.commit()
+        //regresar()
+
+    }
+
+    private fun regresar() {
+        val intRegresar = Intent (requireContext(), MainActivity::class.java)
+        startActivity(intRegresar)
     }
 
     override fun onDestroyView() {

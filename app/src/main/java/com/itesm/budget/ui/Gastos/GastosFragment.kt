@@ -165,7 +165,9 @@ class GastosFragment : Fragment() {
 
         println("Usuario actualizado")
 
-        DialogoAñadir()
+        //DialogoAñadir()
+        Toast.makeText(activity, "Gasto Añadido",Toast.LENGTH_LONG).show()
+        guardarNube()
     }
 
     /// Todos los dialogos

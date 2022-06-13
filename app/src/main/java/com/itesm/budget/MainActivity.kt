@@ -45,6 +45,21 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        /// Datos slidebar
+        /// Obtener shared pref
+        val sharedPref = getSharedPreferences(
+            "usuario", AppCompatActivity.MODE_PRIVATE
+        )
+        val nombre = sharedPref?.getString("Nombre", "No hay nombre")
+        val correo = sharedPref?.getString("Correo","No hay Correo")
+
+        val tvNombre = navView.getHeaderView(0).findViewById<TextView>(R.id.tvNombre)
+        tvNombre.text = nombre
+
+        val tvEmail = navView.getHeaderView(0).findViewById<TextView>(R.id.tvEmail)
+        tvEmail.text = correo
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,4 +72,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
 }
