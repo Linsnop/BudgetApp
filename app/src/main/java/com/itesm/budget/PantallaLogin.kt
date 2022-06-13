@@ -49,14 +49,15 @@ class PantallaLogin : AppCompatActivity() {
             editor.putString("Token", usuario?.uid)
             editor.putString("Nombre", usuario?.displayName)
             editor.putString("Correo", usuario?.email)
+            editor.putFloat("Saldo",0.0f)
             editor.commit()
-            //Intento de conseguir saldo
+
 
             BuscarSaldoEnNube()
 
             /// Subir a la base de datos
-            guardarDatosNube()
-            entrarAPP()
+            //guardarDatosNube()
+            //entrarAPP()
         }
     }
 
@@ -73,15 +74,25 @@ class PantallaLogin : AppCompatActivity() {
         val referencia = baseDatos.getReference("/Usuario/${token}")
 
         referencia.addValueEventListener(object : ValueEventListener {
+            //Se ejecuta despues de cierto tiempo
             override fun onDataChange(snapshot: DataSnapshot) {
                 //llegaron los datos (Snapshot)
                 val usuario = snapshot.getValue(DatosUsuario::class.java)
-                val saldoActual = usuario!!.saldo
+                println("Usuario en data change ${usuario}")
+                if  (usuario == null){
+                    guardarDatosNube()
 
-                /// Guadrar saldo en editor
-                val editor = sharedPref.edit()
-                editor.putFloat("Saldo", saldoActual)
-                editor.commit()
+                }
+                else {
+                    val saldoActual = usuario!!.saldo
+                    /// Guadrar saldo en editor
+                    val editor = sharedPref.edit()
+                    editor.putFloat("Saldo", saldoActual)
+                    editor.commit()
+
+                }
+                entrarAPP()
+                //guardarDatosNube()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -145,7 +156,9 @@ class PantallaLogin : AppCompatActivity() {
             editor.putString("Token", usuario?.uid)
             editor.commit()
 
-            entrarAPP()
+            BuscarSaldoEnNube()
+
+            //entrarAPP()
         } else {
             //Sign In Failed xD
             println("Error: Intantalo de nuevo")

@@ -59,6 +59,7 @@ class HomeFragment : Fragment() {
                     "usuario", AppCompatActivity.MODE_PRIVATE
                 )
                 sharedPref?.edit()?.clear()
+                sharedPref?.edit()?.commit()
 
 
                 // Cargar pantalla Login
