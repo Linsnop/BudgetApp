@@ -49,7 +49,7 @@ class AdaptadorGasto (private val contexto: Context, var arrGastos: Array<Regist
             //TextView con el nombre pais
             vistaRenglon.findViewById<TextView>(R.id.tvCompra).text= gasto.compra
             vistaRenglon.findViewById<TextView>(R.id.tvCategoria).text= gasto.categoria
-            vistaRenglon.findViewById<TextView>(R.id.tvGasto).text= gasto.gasto.toString()
+            vistaRenglon.findViewById<TextView>(R.id.tvGasto).text= "$ ${gasto.gasto.toString()}"
             vistaRenglon.findViewById<TextView>(R.id.tvFecha).text= gasto.fecha
         }
 
